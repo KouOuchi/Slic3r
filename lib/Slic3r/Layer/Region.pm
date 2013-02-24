@@ -549,13 +549,15 @@ sub process_bridges {
         # now, extend our bridge by taking a portion of supporting surfaces
         {
             # offset the bridge by the specified amount of mm (minimum 3)
+            # here we consider the entire expolygon and not just the contour
+            # because while a bridge is not supposed to have holes, an overhang can
             my $bridge_overlap = scale 3;
-            my ($bridge_offset) = $expolygon->contour->offset($bridge_overlap);
+            my @bridge_offset = $expolygon->offset_ex($bridge_overlap);
             
             # calculate the new bridge
             my $intersection = intersection_ex(
                 [ @$expolygon, map $_->p, @supporting_surfaces ],
-                [ $bridge_offset ],
+                [ map @$_, @bridge_offset ],
             );
             
             push @bridges, map Slic3r::Surface->new(

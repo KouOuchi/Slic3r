@@ -5,6 +5,7 @@ use warnings;
 # an ExPolygon is a polygon with holes
 
 use Boost::Geometry::Utils;
+use List::Util qw(first);
 use Math::Geometry::Voronoi;
 use Slic3r::Geometry qw(X Y A B point_in_polygon same_line line_length epsilon);
 use Slic3r::Geometry::Clipper qw(union_ex JT_MITER);
@@ -190,6 +191,11 @@ sub area {
     my $area = $self->contour->area;
     $area -= $_->area for $self->holes;
     return $area;
+}
+
+sub is_consistent {
+    my $self = shift;
+    return $self->contour->is_counter_clockwise && !first { $_->is_counter_clockwise } $self->holes;
 }
 
 # this method only works for expolygons having only a contour or
