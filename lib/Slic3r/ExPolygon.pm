@@ -85,7 +85,11 @@ sub safety_offset {
     
     return (ref $self)->new(
         $self->contour->safety_offset,
-        @{ Slic3r::Geometry::Clipper::safety_offset([$self->holes]) },
+        map [reverse @$_], 
+            @{ Slic3r::Geometry::Clipper::safety_offset(
+               [map [reverse @$_], $self->holes],
+               Slic3r::Geometry::scale -1e-05
+            )}
     );
 }
 

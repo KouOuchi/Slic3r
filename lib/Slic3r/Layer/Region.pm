@@ -464,12 +464,12 @@ sub process_bridges {
         my $expolygon = $surface->expolygon->safety_offset;
         my $description = $surface->surface_type == S_TYPE_BOTTOM ? 'bridge/overhang' : 'reverse bridge';
         
-        # offset the contour and intersect it with the internal surfaces to discover 
-        # which of them has contact with our bridge
+        # offset the solid surface and intersect it with the internal surfaces
+        # to discover which of them has contact with our bridge
         my @supporting_surfaces = ();
-        my ($contour_offset) = $expolygon->contour->offset(scale $self->infill_flow->spacing * sqrt(2));
+        my @solid_offset = $expolygon->offset_ex(scale $self->infill_flow->spacing * sqrt(2));
         foreach my $internal_surface (@internal_surfaces) {
-            my $intersection = intersection_ex([$contour_offset], [$internal_surface->p]);
+            my $intersection = intersection_ex([map @$_, @solid_offset], [$internal_surface->p]);
             if (@$intersection) {
                 push @supporting_surfaces, $internal_surface;
             }
@@ -495,9 +495,11 @@ sub process_bridges {
             my $bridge_over_hole = 0;
             my @edges = ();  # edges are POLYLINES
             foreach my $supporting_surface (@supporting_surfaces) {
-                my @surface_edges = map $_->clip_with_polygon($contour_offset),
+                my @surface_edges;
+                foreach my $solid_offset (@solid_offset) {
+                    push @surface_edges, map $_->clip_with_expolygon($solid_offset),
                     ($supporting_surface->contour, $supporting_surface->holes);
-                
+                }
                 if (@supporting_surfaces == 1 && @surface_edges == 1
                     && @{$supporting_surface->contour} == @{$surface_edges[0]}) {
                     $bridge_over_hole = 1;
@@ -532,7 +534,7 @@ sub process_bridges {
             } elsif (@edges) {
                 my $center = Slic3r::Geometry::bounding_box_center([ map @$_, @edges ]);
                 my $x = my $y = 0;
-                foreach my $point (map @$, @edges) {
+                foreach my $point (map @$_, @edges) {
                     my $line = Slic3r::Line->new($center, $point);
                     my $dir = $line->direction;
                     my $len = $line->length;
