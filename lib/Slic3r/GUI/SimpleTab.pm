@@ -159,7 +159,7 @@ package Slic3r::GUI::SimpleTab::Filament;
 use base 'Slic3r::GUI::SimpleTab';
 
 sub name { 'filament' }
-sub title { 'Filament Settings' }
+sub title { Slic3r::_u('Filament Settings') }
 
 sub build {
     my $self = shift;

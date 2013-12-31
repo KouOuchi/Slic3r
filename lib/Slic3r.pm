@@ -35,6 +35,7 @@ use Encode;
 use Encode::Locale;
 use Boost::Geometry::Utils 0.15;
 use Moo 1.003001;
+use Locale::TextDomain ("slic3r" => "var/locale");
 
 use Slic3r::XS;   # import all symbols (constants etc.) before they get parsed
 use Slic3r::Config;
@@ -158,6 +159,11 @@ sub encode_path {
 sub open {
     my ($fh, $mode, $filename) = @_;
     return CORE::open $$fh, $mode, encode_path($filename);
+}
+
+sub _u {
+    my ($message) = @_;
+    return decode_utf8(__($message));
 }
 
 # this package declaration prevents an ugly fatal warning to be emitted when
