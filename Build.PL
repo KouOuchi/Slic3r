@@ -29,9 +29,16 @@ my %recommends = qw(
     Class::XSAccessor               0
     Growl::GNTP                     0.15
     XML::SAX::ExpatXS               0
+    Locale::TextDomain              0
 );
 
-my $gui = defined $ARGV[0] && $ARGV[0] eq '--gui';
+my $gui;
+my $i18n;
+for(my $i=0; $i<2; $i++) {
+	$gui = defined $ARGV[$i] && $ARGV[$i] eq '--gui';
+	$i18n = defined $ARGV[$i] && $ARGV[$i] eq '--i18n';
+}
+
 if ($gui) {
     %prereqs = qw(
     Wx                              0.9918
@@ -40,6 +47,15 @@ if ($gui) {
     Wx::GLCanvas                    0
     OpenGL                          0
     );
+}
+
+if ($i18n) {
+    %recommends = qw(
+	File::Touch                     0
+    );
+
+	# retrive sources and update gettext's resources
+	system("utils/i18n/gettext.pl") == 0 or die $@;
 }
 
 my @missing_prereqs = ();
