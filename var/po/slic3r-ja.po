@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: bug-gnu-gettext@gnu.org\n"
-"POT-Creation-Date: 2014-01-01 01:04+0900\n"
-"PO-Revision-Date: 2014-01-01 01:06+0900\n"
+"POT-Creation-Date: 2014-01-02 05:23+0900\n"
+"PO-Revision-Date: 2014-01-02 05:38+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ja\n"
@@ -15,10 +15,98 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: lib/Slic3r/GUI/Plater.pm:41
+msgid "What do you want to print today?"
+msgstr "今日は何をプリントしますか？"
+
+#: lib/Slic3r/GUI/Plater.pm:42
+msgid "Drag your objects here"
+msgstr "ここにオブジェクトをドラッグ"
+
 #: lib/Slic3r/GUI/Plater.pm:73
 msgid "Add"
 msgstr "追加"
 
-#: lib/Slic3r/GUI/SimpleTab.pm:162
+#: lib/Slic3r/GUI/Plater.pm:74
+msgid "Delete"
+msgstr "削除"
+
+#: lib/Slic3r/GUI/Plater.pm:75
+msgid "Delete All"
+msgstr "全削除"
+
+#: lib/Slic3r/GUI/Plater.pm:76
+msgid "Arrange"
+msgstr "調整"
+
+#: lib/Slic3r/GUI/Plater.pm:78
+msgid "More"
+msgstr "増加"
+
+#: lib/Slic3r/GUI/Plater.pm:79
+msgid "Fewer"
+msgstr "減少"
+
+#: lib/Slic3r/GUI/Plater.pm:83
+msgid "Rotate"
+msgstr "回転"
+
+#: lib/Slic3r/GUI/Plater.pm:84
+msgid "Scale"
+msgstr "拡大縮小"
+
+#: lib/Slic3r/GUI/Plater.pm:85
+msgid "Split"
+msgstr "分割"
+
+#: lib/Slic3r/GUI/Plater.pm:87
+msgid "View"
+msgstr "ビュー"
+
+#: lib/Slic3r/GUI/Plater.pm:88
+msgid "Settings"
+msgstr "設定"
+
+#: lib/Slic3r/GUI/Plater.pm:129
+msgid "Export G-code"
+msgstr "エクスポート Gコード"
+
+#: lib/Slic3r/GUI/Plater.pm:130
+msgid "Export STL"
+msgstr "エクスポート STL"
+
+#: lib/Slic3r/GUI/Plater.pm:257
+msgid "Info"
+msgstr "情報"
+
+#: lib/Slic3r/GUI/Plater.pm:266
+msgid "Size"
+msgstr "サイズ"
+
+#: lib/Slic3r/GUI/Plater.pm:267
+msgid "Volume"
+msgstr "体積"
+
+#: lib/Slic3r/GUI/Plater.pm:268
+msgid "Facets"
+msgstr "面"
+
+#: lib/Slic3r/GUI/Plater.pm:269
+msgid "Materials"
+msgstr "素材"
+
+#: lib/Slic3r/GUI/Plater.pm:270
+msgid "Manifold"
+msgstr "マニフォールド"
+
+#: lib/Slic3r/GUI/Tab.pm:394 lib/Slic3r/GUI/SimpleTab.pm:107
+msgid "Print Settings"
+msgstr "プリント設定"
+
+#: lib/Slic3r/GUI/Tab.pm:565 lib/Slic3r/GUI/SimpleTab.pm:162
 msgid "Filament Settings"
 msgstr "フィラメント設定"
+
+#: lib/Slic3r/GUI/Tab.pm:665 lib/Slic3r/GUI/SimpleTab.pm:192
+msgid "Printer Settings"
+msgstr "プリンタ設定"
