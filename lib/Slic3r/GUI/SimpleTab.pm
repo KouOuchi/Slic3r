@@ -15,29 +15,29 @@ sub new {
     my $self = $class->SUPER::new($parent, -1, wxDefaultPosition, wxDefaultSize, wxBK_LEFT | wxTAB_TRAVERSAL);
     $self->{options} = []; # array of option names handled by this tab
     $self->{$_} = $params{$_} for qw(on_value_change);
-    
+
     $self->SetScrollbars(1, 1, 1, 1);
-    
+
     $self->{config} = Slic3r::Config->new;
     $self->{optgroups} = [];
-    
+
     $self->{vsizer} = Wx::BoxSizer->new(wxVERTICAL);
     $self->SetSizer($self->{vsizer});
     $self->build;
-    
+
     {
         my $label = Wx::StaticText->new($self, -1, "Want more options? Switch to the Expert Mode.", wxDefaultPosition, wxDefaultSize);
         $label->SetFont(Wx::SystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
         $self->{vsizer}->Add($label, 0, wxEXPAND | wxALL, 10);
     }
-    
+
     return $self;
 }
 
 sub append_optgroup {
     my $self = shift;
     my %params = @_;
-    
+
     # apply default values
     {
         my @options = @{$params{options}};
@@ -45,7 +45,7 @@ sub append_optgroup {
         my $config = Slic3r::Config->new_from_defaults(@options);
         $self->{config}->apply($config);
     }
-    
+
     my $class = $params{class} || 'Slic3r::GUI::ConfigOptionsGroup';
     my $optgroup = $class->new(
         parent      => $self,
@@ -54,7 +54,7 @@ sub append_optgroup {
         on_change   => sub { $self->on_value_change(@_) },
         %params,
     );
-    
+
     push @{$self->{optgroups}}, $optgroup;
     ($params{sizer} || $self->{vsizer})->Add($optgroup->sizer, 0, wxEXPAND | wxALL, 10);
 }
@@ -62,7 +62,7 @@ sub append_optgroup {
 sub load_config_file {
     my $self = shift;
     my ($file) = @_;
-    
+
     my $config = Slic3r::Config->load($file);
     $self->load_config($config);
 }
@@ -70,7 +70,7 @@ sub load_config_file {
 sub load_config {
     my $self = shift;
     my ($config) = @_;
-    
+
     foreach my $opt_key (grep $self->{config}->has($_), keys %$config) {
         my $value = $config->get($opt_key);
         $self->{config}->set($opt_key, $value);
@@ -81,7 +81,7 @@ sub load_config {
 sub set_value {
     my $self = shift;
     my ($opt_key, $value) = @_;
-    
+
     my $changed = 0;
     foreach my $optgroup (@{$self->{optgroups}}) {
         $changed = 1 if $optgroup->set_value($opt_key, $value);
@@ -104,11 +104,11 @@ use base 'Slic3r::GUI::SimpleTab';
 use Wx qw(:sizer);
 
 sub name { 'print' }
-sub title { 'Print Settings' }
+sub title { Slicr3::_u('Print Settings') }
 
 sub build {
     my $self = shift;
-    
+
     $self->append_optgroup(
         title => 'General',
         options => [qw(layer_height perimeters top_solid_layers bottom_solid_layers)],
@@ -121,27 +121,27 @@ sub build {
             },
         ],
     );
-    
+
     $self->append_optgroup(
         title => 'Infill',
         options => [qw(fill_density fill_pattern)],
     );
-    
+
     $self->append_optgroup(
         title => 'Support material',
         options => [qw(support_material support_material_spacing raft_layers)],
     );
-    
+
     $self->append_optgroup(
         title => 'Speed',
         options => [qw(perimeter_speed infill_speed travel_speed)],
     );
-    
+
     $self->append_optgroup(
         title => 'Brim',
         options => [qw(brim_width)],
     );
-    
+
     $self->append_optgroup(
         title => 'Sequential printing',
         options => [qw(complete_objects extruder_clearance_radius extruder_clearance_height)],
@@ -163,12 +163,12 @@ sub title { Slic3r::_u('Filament Settings') }
 
 sub build {
     my $self = shift;
-    
+
     $self->append_optgroup(
         title => 'Filament',
         options => ['filament_diameter#0', 'extrusion_multiplier#0'],
     );
-    
+
     $self->append_optgroup(
         title => 'Temperature (°C)',
         options => ['temperature#0', 'first_layer_temperature#0', qw(bed_temperature first_layer_bed_temperature)],
@@ -189,37 +189,37 @@ package Slic3r::GUI::SimpleTab::Printer;
 use base 'Slic3r::GUI::SimpleTab';
 
 sub name { 'printer' }
-sub title { 'Printer Settings' }
+sub title { Slicr3::_u('Printer Settings') }
 
 sub build {
     my $self = shift;
-    
+
     $self->append_optgroup(
         title => 'Size and coordinates',
         options => [qw(bed_size print_center z_offset)],
     );
-    
+
     $self->append_optgroup(
         title => 'Firmware',
         options => [qw(gcode_flavor)],
     );
-    
+
     $self->append_optgroup(
         title => 'Extruder',
         options => ['nozzle_diameter#0'],
     );
-    
+
     $self->append_optgroup(
         title => 'Retraction',
         options => ['retract_length#0', 'retract_lift#0'],
     );
-    
+
     $self->append_optgroup(
         title => 'Start G-code',
         no_labels => 1,
         options => [qw(start_gcode)],
     );
-    
+
     $self->append_optgroup(
         title => 'End G-code',
         no_labels => 1,
