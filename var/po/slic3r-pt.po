@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: bug-gnu-gettext@gnu.org\n"
-"POT-Creation-Date: 2014-01-01 01:04+0900\n"
+"POT-Creation-Date: 2014-01-02 05:23+0900\n"
 "PO-Revision-Date: 2014-01-01 01:12+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,10 +15,101 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: lib/Slic3r/GUI/Plater.pm:41
+msgid "What do you want to print today?"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:42
+msgid "Drag your objects here"
+msgstr ""
+
 #: lib/Slic3r/GUI/Plater.pm:73
 msgid "Add"
 msgstr "Adicionar"
 
-#: lib/Slic3r/GUI/SimpleTab.pm:162
+#: lib/Slic3r/GUI/Plater.pm:74
+msgid "Delete"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:75
+msgid "Delete All"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:76
+msgid "Arrange"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:78
+msgid "More"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:79
+msgid "Fewer"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:83
+msgid "Rotate"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:84
+msgid "Scale"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:85
+msgid "Split"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:87
+msgid "View"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:88
+#, fuzzy
+msgid "Settings"
+msgstr "Config. do Filamento"
+
+#: lib/Slic3r/GUI/Plater.pm:129
+msgid "Export G-code"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:130
+msgid "Export STL"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:257
+msgid "Info"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:266
+msgid "Size"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:267
+msgid "Volume"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:268
+msgid "Facets"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:269
+msgid "Materials"
+msgstr ""
+
+#: lib/Slic3r/GUI/Plater.pm:270
+msgid "Manifold"
+msgstr ""
+
+#: lib/Slic3r/GUI/Tab.pm:394 lib/Slic3r/GUI/SimpleTab.pm:107
+#, fuzzy
+msgid "Print Settings"
+msgstr "Config. do Filamento"
+
+#: lib/Slic3r/GUI/Tab.pm:565 lib/Slic3r/GUI/SimpleTab.pm:162
 msgid "Filament Settings"
+msgstr "Config. do Filamento"
+
+#: lib/Slic3r/GUI/Tab.pm:665 lib/Slic3r/GUI/SimpleTab.pm:192
+#, fuzzy
+msgid "Printer Settings"
 msgstr "Config. do Filamento"
