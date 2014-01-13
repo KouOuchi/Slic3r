@@ -17,9 +17,16 @@ sub debugf {
 # load threads before Moo as required by it
 our $have_threads;
 BEGIN {
+
+    ### define i18n function
+    sub _u {
+        my ($message) = @_;
+        return decode_utf8(__($message));
+    }
+
     use Config;
     $have_threads = $Config{useithreads} && eval "use threads; use threads::shared; use Thread::Queue; 1";
-    
+
     ### temporarily disable threads if using the broken Moo version
     use Moo;
     $have_threads = 0 if $Moo::VERSION == 1.003000;
@@ -88,19 +95,19 @@ our $Config;
 
 sub parallelize {
     my %params = @_;
-    
+
     if (!$params{disable} && $Slic3r::have_threads && $Config->threads > 1) {
         my @items = (ref $params{items} eq 'CODE') ? $params{items}->() : @{$params{items}};
         my $q = Thread::Queue->new;
         $q->enqueue(@items, (map undef, 1..$Config->threads));
-        
+
         my $thread_cb = sub {
             $params{thread_cb}->($q);
             Slic3r::thread_cleanup();
-            
-            # This explicit exit avoids an untrappable 
+
+            # This explicit exit avoids an untrappable
             # "Attempt to free unreferenced scalar" error
-            # triggered on Ubuntu 12.04 32-bit when we're running 
+            # triggered on Ubuntu 12.04 32-bit when we're running
             # from the Wx plater and
             # we're reusing the same plater object more than once.
             # The downside to using this exit is that we can't return
@@ -111,7 +118,7 @@ sub parallelize {
             threads->exit;
         };
         $params{collect_cb} ||= sub {};
-            
+
         @_ = ();
         foreach my $th (map threads->create($thread_cb), 1..$Config->threads) {
             $params{collect_cb}->($th->join);
@@ -123,13 +130,13 @@ sub parallelize {
 
 # call this at the very end of each thread (except the main one)
 # so that it does not try to free existing objects.
-# at that stage, existing objects are only those that we 
-# inherited at the thread creation (thus shared) and those 
+# at that stage, existing objects are only those that we
+# inherited at the thread creation (thus shared) and those
 # that we are returning: destruction will be handled by the
 # main thread in both cases.
 # reminder: do not destroy inherited objects in other threads,
 # as the main thread will still try to destroy them when they
-# go out of scope; in other words, if you're undef()'ing an 
+# go out of scope; in other words, if you're undef()'ing an
 # object in a thread, make sure the main thread still holds a
 # reference so that it won't be destroyed in thread.
 sub thread_cleanup {
@@ -159,11 +166,6 @@ sub encode_path {
 sub open {
     my ($fh, $mode, $filename) = @_;
     return CORE::open $$fh, $mode, encode_path($filename);
-}
-
-sub _u {
-    my ($message) = @_;
-    return decode_utf8(__($message));
 }
 
 # this package declaration prevents an ugly fatal warning to be emitted when

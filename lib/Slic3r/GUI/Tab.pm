@@ -671,15 +671,15 @@ sub build {
 
     $self->add_options_page('General', 'printer_empty.png', optgroups => [
         {
-            title => 'Size and coordinates',
+            title => Slic3r::_u('Size and coordinates'),
             options => [qw(bed_size print_center z_offset)],
         },
         {
-            title => 'Firmware',
+            title => Slic3r::_u('Firmware'),
             options => [qw(gcode_flavor use_relative_e_distances)],
         },
         {
-            title => 'Capabilities',
+            title => Slic3r::_u('Capabilities'),
             options => [
                 {
                     opt_key => 'extruders_count',
@@ -693,29 +693,29 @@ sub build {
             ],
         },
         {
-            title => 'Advanced',
+            title => Slic3r::_u('Advanced'),
             options => [qw(use_firmware_retraction vibration_limit)],
         },
     ]);
 
     $self->add_options_page('Custom G-code', 'cog.png', optgroups => [
         {
-            title => 'Start G-code',
+            title => Slic3r::_u('Start G-code'),
             no_labels => 1,
             options => [qw(start_gcode)],
         },
         {
-            title => 'End G-code',
+            title => Slic3r::_u('End G-code'),
             no_labels => 1,
             options => [qw(end_gcode)],
         },
         {
-            title => 'Layer change G-code',
+            title => Slic3r::_u('Layer change G-code'),
             no_labels => 1,
             options => [qw(layer_gcode)],
         },
         {
-            title => 'Tool change G-code',
+            title => Slic3r::_u('Tool change G-code'),
             no_labels => 1,
             options => [qw(toolchange_gcode)],
         },
@@ -748,22 +748,22 @@ sub _build_extruder_pages {
         # build page if it doesn't exist
         $self->{extruder_pages}[$extruder_idx] ||= $self->add_options_page("Extruder " . ($extruder_idx + 1), 'funnel.png', optgroups => [
             {
-                title => 'Size',
+                title => Slic3r::_u('Size'),
                 options => ['nozzle_diameter#' . $extruder_idx],
             },
             {
-                title => 'Position (for multi-extruder printers)',
+                title => Slic3r::_u('Position (for multi-extruder printers)'),
                 options => ['extruder_offset#' . $extruder_idx],
             },
             {
-                title => 'Retraction',
+                title => Slic3r::_u('Retraction'),
                 options => [
                     map "${_}#${extruder_idx}",
                         qw(retract_length retract_lift retract_speed retract_restart_extra retract_before_travel retract_layer_change wipe)
                 ],
             },
             {
-                title => 'Retraction when tool is disabled (advanced settings for multi-extruder setups)',
+                title => Slic3r::_u('Retraction when tool is disabled (advanced settings for multi-extruder setups)'),
                 options => [
                     map "${_}#${extruder_idx}",
                         qw(retract_length_toolchange retract_restart_extra_toolchange)

@@ -13,7 +13,7 @@ Slic3r::GUI::OptionsGroup - pre-filled Wx::StaticBoxSizer wrapper containing one
 
     my $optgroup = Slic3r::GUI::OptionsGroup->new(
         parent  => $self->parent,
-        title   => 'Layers',
+        title   => Slic3r::_u('Layers'),
         options => [
             {
                 opt_key     => 'layer_height',  # mandatory
@@ -59,22 +59,22 @@ sub _trigger_options {}
 
 sub BUILD {
     my $self = shift;
-    
+
     {
         my $box = Wx::StaticBox->new($self->parent, -1, $self->title);
         $self->sizer(Wx::StaticBoxSizer->new($box, wxVERTICAL));
     }
-    
+
     my $num_columns = $self->extra_column ? 3 : 2;
     my $grid_sizer = Wx::FlexGridSizer->new(scalar(@{$self->options}), $num_columns, 0, 0);
     $grid_sizer->SetFlexibleDirection(wxHORIZONTAL);
     $grid_sizer->AddGrowableCol($self->no_labels ? 0 : 1);
-    
+
     # TODO: border size may be related to wxWidgets 2.8.x vs. 2.9.x instead of wxMAC specific
     $self->sizer->Add($grid_sizer, 0, wxEXPAND | wxALL, &Wx::wxMAC ? 0 : 5);
-    
+
     $self->{sidetext_font} = Wx::SystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-    
+
     foreach my $line (@{$self->lines}) {
         if ($line->{widget}) {
             my $window = $line->{widget}->GetWindow($self->parent);
@@ -88,7 +88,7 @@ sub BUILD {
 # default behavior: one option per line
 sub _build_lines {
     my $self = shift;
-    
+
     my $lines = [];
     foreach my $opt (@{$self->options}) {
         push @$lines, {
@@ -104,7 +104,7 @@ sub _build_lines {
 sub single_option_line {
     my $class = shift;
     my ($opt_key) = @_;
-    
+
     return {
         label       => $Slic3r::Config::Options->{$opt_key}{label},
         sidetext    => $Slic3r::Config::Options->{$opt_key}{sidetext},
@@ -115,11 +115,11 @@ sub single_option_line {
 sub _build_line {
     my $self = shift;
     my ($line, $grid_sizer) = @_;
-    
+
     if ($self->extra_column) {
         $grid_sizer->Add($self->extra_column->($line), 0, wxALIGN_CENTER_VERTICAL, 0);
     }
-    
+
     my $label;
     if (!$self->no_labels) {
         $label = Wx::StaticText->new($self->parent, -1, $line->{label} ? "$line->{label}:" : "", wxDefaultPosition, [$self->label_width, -1]);
@@ -127,7 +127,7 @@ sub _build_line {
         $grid_sizer->Add($label, 0, wxALIGN_CENTER_VERTICAL, 0);
         $label->SetToolTipString($line->{tooltip}) if $line->{tooltip};
     }
-    
+
     my @fields = ();
     my @field_labels = ();
     foreach my $opt_key (@{$line->{options}}) {
@@ -159,10 +159,10 @@ sub _build_line {
 sub _build_field {
     my $self = shift;
     my ($opt) = @_;
-    
+
     my $opt_key = $opt->{opt_key};
     $self->_triggers->{$opt_key} = $opt->{on_change} || sub {};
-    
+
     my $field;
     my $tooltip = $opt->{tooltip};
     if ($opt->{type} =~ /^(i|f|s|s@)$/) {
@@ -170,12 +170,12 @@ sub _build_field {
         $style = wxTE_MULTILINE if $opt->{multiline};
         # default width on Windows is too large
         my $size = Wx::Size->new($opt->{width} || 60, $opt->{height} || -1);
-        
+
         $field = $opt->{type} eq 'i'
             ? Wx::SpinCtrl->new($self->parent, -1, $opt->{default}, wxDefaultPosition, $size, $style, $opt->{min} || 0, $opt->{max} || 2147483647, $opt->{default})
             : Wx::TextCtrl->new($self->parent, -1, $opt->{default}, wxDefaultPosition, $size, $style);
         $field->Disable if $opt->{readonly};
-        
+
         my $on_change = sub { $self->_on_change($opt_key, $field->GetValue) };
         if ($opt->{type} eq 'i') {
             $self->_setters->{$opt_key} = sub { $field->SetValue($_[0]) };
@@ -223,8 +223,8 @@ sub _build_field {
         };
         $self->_setters->{$opt_key}->($opt->{default});
 
-        $tooltip .= " (default: " 
-                 . $opt->{labels}[ first { $opt->{values}[$_] eq $opt->{default} } 0..$#{$opt->{values}} ] 
+        $tooltip .= " (default: "
+                 . $opt->{labels}[ first { $opt->{values}[$_] eq $opt->{default} } 0..$#{$opt->{values}} ]
                  . ")" if ($opt->{default});
     } else {
         die "Unsupported option type: " . $opt->{type};
@@ -238,14 +238,14 @@ sub _build_field {
 sub _option {
     my $self = shift;
     my ($opt_key) = @_;
-    
+
     return first { $_->{opt_key} eq $opt_key } @{$self->options};
 }
 
 sub _on_change {
     my $self = shift;
     my ($opt_key, $value) = @_;
-    
+
     return if $self->sizer->GetStaticBox->GetParent->{disabled};
     $self->_triggers->{$opt_key}->($value);
     $self->on_change->($opt_key, $value);
@@ -262,13 +262,13 @@ value, otherwise it will return false.
 sub set_value {
     my $self = shift;
     my ($opt_key, $value) = @_;
-    
+
     if ($self->_setters->{$opt_key}) {
         $self->_setters->{$opt_key}->($value);
         $self->_on_change($opt_key, $value);
         return 1;
     }
-    
+
     return 0;
 }
 
@@ -303,7 +303,7 @@ has 'full_labels' => (is => 'ro', default => sub {0});
 
 sub _trigger_options {
     my $self = shift;
-    
+
     @{$self->options} = map {
         my $opt = $_;
         if (ref $opt ne 'HASH') {
@@ -326,25 +326,25 @@ sub _trigger_options {
 sub _option {
     my $self = shift;
     my ($opt_key) = @_;
-    
+
     return first { $_->{opt_key} =~ /^\Q$opt_key\E(#.+)?$/ } @{$self->options};
 }
 
 sub set_value {
     my $self = shift;
     my ($opt_key, $value) = @_;
-    
-    my $opt = $self->_option($opt_key) or return 0; 
-    
+
+    my $opt = $self->_option($opt_key) or return 0;
+
     # if user is setting a non-config option, forward the call to the parent
     if (!$opt->{config}) {
         return $self->SUPER::set_value($opt_key, $value);
     }
-    
+
     my $changed = 0;
     foreach my $full_key (keys %{$self->_setters}) {
         my ($key, $index) = $self->_split_key($full_key);
-        
+
         if ($key eq $opt_key) {
             $self->config->set($key, $value);
             $self->SUPER::set_value($full_key, $self->_get_config($key, $index));
@@ -357,7 +357,7 @@ sub set_value {
 sub _split_key {
     my $self = shift;
     my ($opt_key) = @_;
-    
+
     my $index;
     $opt_key =~ s/#(\d+)$// and $index = $1;
     return ($opt_key, $index);
@@ -366,7 +366,7 @@ sub _split_key {
 sub _get_config {
     my $self = shift;
     my ($opt_key, $index) = @_;
-    
+
     my ($get_m, $serialized) = $self->_config_methods($opt_key, $index);
     my $value = $self->config->$get_m($opt_key);
     if (defined $index) {
@@ -379,7 +379,7 @@ sub _get_config {
 sub _set_config {
     my $self = shift;
     my ($opt_key, $index, $value) = @_;
-    
+
     my ($get_m, $serialized) = $self->_config_methods($opt_key, $index);
     defined $index
         ? $self->config->$get_m($opt_key)->[$index] = $value
@@ -389,7 +389,7 @@ sub _set_config {
 sub _config_methods {
     my $self = shift;
     my ($opt_key, $index) = @_;
-    
+
     # if it's an array type but no index was specified, use the serialized version
     return ($Slic3r::Config::Options->{$opt_key}{type} =~ /\@$/ && !defined $index)
         ? qw(serialize 1)
@@ -403,7 +403,7 @@ use Wx qw(:misc :systemsettings);
 sub GetWindow {
     my $self = shift;
     my ($parent) = @_;
-    
+
     $self->{statictext} = Wx::StaticText->new($parent, -1, "foo", wxDefaultPosition, wxDefaultSize);
     my $font = Wx::SystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
     $self->{statictext}->SetFont($font);
@@ -413,7 +413,7 @@ sub GetWindow {
 sub SetText {
     my $self = shift;
     my ($value) = @_;
-    
+
     $self->{statictext}->SetLabel($value);
     $self->{statictext}->Wrap(400);
     $self->{statictext}->GetParent->Layout;
