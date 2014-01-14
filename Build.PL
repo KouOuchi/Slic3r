@@ -24,12 +24,13 @@ my %prereqs = qw(
     Test::More                      0
     IO::Scalar                      0
     Time::HiRes                     0
+    Locale::TextDomain              0
+    File::Touch                     0
 );
 my %recommends = qw(
     Class::XSAccessor               0
     Growl::GNTP                     0.15
     XML::SAX::ExpatXS               0
-    Locale::TextDomain              0
 );
 
 my $gui;
@@ -47,15 +48,6 @@ if ($gui) {
     Wx::GLCanvas                    0
     OpenGL                          0
     );
-}
-
-if ($i18n) {
-    %recommends = qw(
-	File::Touch                     0
-    );
-
-	# retrive sources and update gettext's resources
-	system("utils/i18n/gettext.pl") == 0 or die $@;
 }
 
 my @missing_prereqs = ();
@@ -157,6 +149,11 @@ EOF
         if ($res != 0) {
             die "The XS/C++ code failed to compile, aborting\n";
         }
+    }
+
+    if ($i18n) {
+	# retrive sources and update gettext's resources
+	system(qw(perl utils/i18n/gettext.pl)) == 0 or die $@;
     }
 }
 

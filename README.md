@@ -5,43 +5,68 @@ A: Localize Slic3r [[project homepage]] (http://slic3r.org/) and an acceptance o
 Slic3r-i18n
 ======
 
-### What are Slic3r-i18n's main features?
+### What are Slic3r-i18n's key features?
 
-Key features are:
-
-* Localize messages and GUI texts with GNU Gettext.
+* Localized message, GUI Text with GNU Gettext.
 
 ### I'm a developper. How to use gettext function?
 
 * You have only to use ``Slic3r::_u``. This function is a wrapper of
   ``Locale::TextDomain::__``.
 
-    sub title { Slic3r::_u('Filament Settings') } # <---
+  ```
+  # Someone translates into his language
+  sub title { Slic3r::_u('Filament Settings') } 
+  ```
 
-  NOTE: ``Locale::TextDomain::__`` is insuficient for utf-8 character and Wx component. So use ``Slic3r::_u``.
+  NOTE: ``Locale::TextDomain::__`` doesn't fit for Wx component. So use ``Slic3r::_u``.
 
 ### What are your policy?
 
 ```
-1 rebase "stable" branch onto upstream.
-2 add resource and test well.
-3 send pull request.
-4 "i18n-stable" in this repo is a stable branch.
-  "i18n-pullreq" in this repo is a pull-req branch.
+1 "i18n-dev" branch is a trunk.
+2 "i18n-stable" branch is a release.
+3 "i18n-pullreq" branch is a pull-request.
 ```
 
 ### How to install?
 
-Just now there is no precompiled package.
-You want to compile the source yourself just do the following:
+#### Linux Users
+
+All Linux distribution has gettext, I think. So, it's easy.
 
 ```
 $ git clone https://github.com/KouOuchi/Slic3r-i18n.git
 $ cd Slic3r
-$ sudo perl Build.PL
-$ sudo perl Build.PL --gui --i18n
+$ perl Build.PL
+$ perl Build.PL --gui --i18n
 $ LC_ALL=ru_RU.UTF-8 perl slic3r.pl --gui
 ```
+
+#### Windows Users
+
+To build gettext, get MSYS shell environment(http://www.mingw.org/wiki/Getting_Started).
+``Base System`` and ``make`` are required.
+
+NOTE: You may have to use the same compiler as you use in perl. 
+
+And then, get latest gettext package ``gettext-0.18.3.1-1-mingw32-src.tar.lzma`` from (http://sourceforge.net/projects/mingw/files/MinGW/Base/gettext/gettext-0.18.3.1-1/).
+Extract package and run shell script. 
+
+```
+$ tar xivf gettext-0.18.3.1-1-mingw32-src.tar.lzma
+$ cd gettext-0.18.3.1-1-mingw32
+$ tar xzvf gettext-0.18.3.1.tar.gz
+$ cd gettext-0.18.3.1
+$ patch -p1 < ../config.sub.patch
+$ export PATH=/c/Apps/mingw64/bin:$PATH
+$ ./configure --prefix=/c/Apps/mingw64 \
+     --host=x86_64-w64-mingw32 --build=x86_64-w64-mingw32 
+$ make
+$ make install
+```
+
+NOTE: I tested on Windows7 64bit (Sitrus Perl & MinGW). MinGW is installed into /c/Apps/mingw64.
 
 ### Can I help?
 
@@ -51,22 +76,25 @@ Let's translate into your language.
 
 Add your language code to utils/i18n/gettext.pl.
 
+```
 $ gedit utils/i18n/gettext.pl
+```
 
-    my(@LOCALE_LIST)=("de", "fr", "it", "pt", "ru", "zh_CN", "nl", "es", "lv", "ja"); # <--- Add here.
+```
+# Add your language 
+my(@LOCALE_LIST)=("de", "fr", "it", "pt", "ru", "zh_CN", "nl", "es", "lv", "ja"); 
+```
 
 NOTE: If you don't know your language code, please see gettext website.
 
-Run it.
 ```
-$ sudo perl utils/i18n/gettext.pl
+$ perl utils/i18n/gettext.pl
 ```
 
 ### How can I modify our language resource?
 
-Run it.
 ```
-$ sudo perl utils/i18n/gettext.pl
+$ perl utils/i18n/gettext.pl
 ```
 
 Edit .po(gettext resource) file. NOTE: To edit .po file you should get suitable
@@ -77,12 +105,20 @@ $ poedit var/po/slic3r-ru.po
 
 Run utils/i18n/gettext.pl again. You get .mo(gettext catalogue) file.
 ```
-$ sudo perl utils/i18n/gettext.pl
+$ perl utils/i18n/gettext.pl
 ```
 
 Finally, set language environment value(LC_ALL) to your language code.
+
+#### Linux Users
 ```
 $ LC_ALL=ru_RU.UTF-8 perl slic3r.pl --gui
+```
+
+#### Windows Users
+```
+$ set LC_ALL=ru_RU.UTF-8
+$ perl slic3r.pl --gui
 ```
 
 ### Screen Shot
