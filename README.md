@@ -58,7 +58,7 @@ $ tar xivf gettext-0.18.3.1-1-mingw32-src.tar.lzma
 $ cd gettext-0.18.3.1-1-mingw32
 $ tar xzvf gettext-0.18.3.1.tar.gz
 $ cd gettext-0.18.3.1
-$ patch -p1 < ../config.sub.patch
+$ patch < ../config.sub.patch
 $ export PATH=/c/Apps/mingw64/bin:$PATH
 $ ./configure --prefix=/c/Apps/mingw64 \
      --host=x86_64-w64-mingw32 --build=x86_64-w64-mingw32 
