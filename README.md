@@ -46,11 +46,18 @@ $ LC_ALL=ru_RU.UTF-8 perl slic3r.pl --gui
 #### Windows Users
 
 To build gettext, get MSYS shell environment(http://www.mingw.org/wiki/Getting_Started).
-``Base System`` and ``make`` are required.
+``Base System``, ``make``, ``xgettext`` are required.
 
 NOTE: You may have to use the same compiler as you use in perl. 
 
-And then, get latest gettext package ``gettext-0.18.3.1-1-mingw32-src.tar.lzma`` from (http://sourceforge.net/projects/mingw/files/MinGW/Base/gettext/gettext-0.18.3.1-1/).
+NOTE: You can also install gettext package manually. But I installed it MSYS installer at the same time. 
+
+
+NOTE: I tested on Windows7 64bit (Sitrus Perl & MinGW). MinGW is installed into /c/Apps/mingw64.
+
+#### If you want to install gettext manually :
+
+get latest gettext package ``gettext-0.18.3.1-1-mingw32-src.tar.lzma`` from (http://sourceforge.net/projects/mingw/files/MinGW/Base/gettext/gettext-0.18.3.1-1/).
 Extract package and run shell script. 
 
 ```
@@ -65,8 +72,6 @@ $ ./configure --prefix=/c/Apps/mingw64 \
 $ make
 $ make install
 ```
-
-NOTE: I tested on Windows7 64bit (Sitrus Perl & MinGW). MinGW is installed into /c/Apps/mingw64.
 
 ### Can I help?
 

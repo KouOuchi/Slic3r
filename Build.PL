@@ -36,8 +36,12 @@ my %recommends = qw(
 my $gui;
 my $i18n;
 for(my $i=0; $i<2; $i++) {
-	$gui = defined $ARGV[$i] && $ARGV[$i] eq '--gui';
-	$i18n = defined $ARGV[$i] && $ARGV[$i] eq '--i18n';
+    if (defined $ARGV[$i] && $ARGV[$i] eq '--gui') {
+	$gui = 1;
+    }
+    if (defined $ARGV[$i] && $ARGV[$i] eq '--i18n') {
+	$i18n = 1;
+    }
 }
 
 if ($gui) {
@@ -128,19 +132,17 @@ EOF
             }
         }
     }
-    
+
     if (!$gui) {
         # temporarily require this dev version until this upstream bug
         # is resolved: https://rt.cpan.org/Ticket/Display.html?id=86367
-        system $cpanm, 'SMUELLER/ExtUtils-ParseXS-3.18_04.tar.gz';
+        system $cpanm, 'SMUELLER/ExtUtils-ParseXS-3.24.tar.gz';
         
         # clean xs directory before reinstalling, to make sure Build is called
         # with current perl binary
         if (-e './xs/Build') {
             if ($^O eq 'MSWin32') {
-                system 'cd', 'xs';
-                system 'Build', 'distclean';
-                system 'cd', '..';
+                system 'cmd.exe', '/K', 'xs\Build.bat', 'distclean';
             } else {
                 system './xs/Build', 'distclean';
             }
@@ -153,7 +155,13 @@ EOF
 
     if ($i18n) {
 	# retrive sources and update gettext's resources
-	system(qw(perl utils/i18n/gettext.pl)) == 0 or die $@;
+        if (-e './utils/i18n/gettext.pl') {
+	    if ($^O eq 'MSWin32') {
+                system 'perl', 'utils\i18n\gettext.pl';
+            } else {
+                system 'perl', './utils/i18n/gettext.pl';
+            }
+        }
     }
 }
 

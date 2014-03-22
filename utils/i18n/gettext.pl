@@ -72,10 +72,18 @@ system($xgettext_command) == 0 or die $@;
 # not exists po
 if(-f "$PO_DIRECTORY/$PO_NAME.pot") {
     # exists pot
-    system("utils/i18n/remove-potcdata.pl < $PO_DIRECTORY/$PO_NAME.pot > $PO_DIRECTORY/$PO_NAME.1po") == 0
-      or die $@;
-    system("utils/i18n/remove-potcdata.pl < $PO_DIRECTORY/$PO_NAME.po > $PO_DIRECTORY/$PO_NAME.2po") == 0
-      or die $@;
+    if ($^O eq 'MSWin32') {
+	system('cmd.exe', '/K', 'perl', 'utils\i18n\remove-potcdata.pl', '<', "$PO_DIRECTORY/$PO_NAME.pot", '>', "$PO_DIRECTORY/$PO_NAME.1po") == 0
+	    or die $@;
+	system('cmd.exe', '/K', 'perl', 'utils\i18n\remove-potcdata.pl', '<', "$PO_DIRECTORY/$PO_NAME.po", '>', "$PO_DIRECTORY/$PO_NAME.2po") == 0
+	    or die $@;
+    } else {
+	system("utils/i18n/remove-potcdata.pl < $PO_DIRECTORY/$PO_NAME.pot > $PO_DIRECTORY/$PO_NAME.1po") == 0
+	    or die $@;
+	system("utils/i18n/remove-potcdata.pl < $PO_DIRECTORY/$PO_NAME.po > $PO_DIRECTORY/$PO_NAME.2po") == 0
+	    or die $@;
+    }
+    
 
     if(compare("$PO_DIRECTORY/$PO_NAME.1po", "$PO_DIRECTORY/$PO_NAME.2po") == 0) {
         unlink "$PO_DIRECTORY/$PO_NAME.po";
