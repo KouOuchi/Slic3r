@@ -10,7 +10,7 @@ use File::Find ();
 
 # define locales
 my(@LOCALE_LIST)=("de", "fr", "it", "pt", "ru", "zh_CN", "nl", "es", "lv", "ja");
-my($debug); 
+my($debug)=1; 
 
 # define directory
 my($PO_DIRECTORY)="var/po";
@@ -39,7 +39,7 @@ File::Find::find({wanted => \&wanted}, @SRC_FILE_OR_DIRECTORY_LIST);
 $fh->close();
 
 # debug
-print STDERR "$filelist\n" if $debug;
+print STDERR "gettext.pl: files ===> $filelist\n" if defined $debug;
 
 # create xgettext command
 my($package_gnu)='';
@@ -63,19 +63,15 @@ EOF
 
 # run xgettext
 print STDERR "gettext.pl: Run xgettext...\n";
-
-# debug
-print STDERR "$filelist\n" if $xgettext_command;
-
 system($xgettext_command) == 0 or die $@;
 
 # not exists po
 if(-f "$PO_DIRECTORY/$PO_NAME.pot") {
     # exists pot
     if ($^O eq 'MSWin32') {
-	system('cmd.exe', '/K', 'perl', 'utils\i18n\remove-potcdata.pl', '<', "$PO_DIRECTORY/$PO_NAME.pot", '>', "$PO_DIRECTORY/$PO_NAME.1po") == 0
+	system('cmd.exe', '/C', "$^X utils/i18n/remove-potcdata.pl < $PO_DIRECTORY/$PO_NAME.pot > $PO_DIRECTORY/$PO_NAME.1po") == 0
 	    or die $@;
-	system('cmd.exe', '/K', 'perl', 'utils\i18n\remove-potcdata.pl', '<', "$PO_DIRECTORY/$PO_NAME.po", '>', "$PO_DIRECTORY/$PO_NAME.2po") == 0
+	system('cmd.exe', '/C', "$^X utils/i18n/remove-potcdata.pl < $PO_DIRECTORY/$PO_NAME.po > $PO_DIRECTORY/$PO_NAME.2po") == 0
 	    or die $@;
     } else {
 	system("utils/i18n/remove-potcdata.pl < $PO_DIRECTORY/$PO_NAME.pot > $PO_DIRECTORY/$PO_NAME.1po") == 0
@@ -83,7 +79,6 @@ if(-f "$PO_DIRECTORY/$PO_NAME.pot") {
 	system("utils/i18n/remove-potcdata.pl < $PO_DIRECTORY/$PO_NAME.po > $PO_DIRECTORY/$PO_NAME.2po") == 0
 	    or die $@;
     }
-    
 
     if(compare("$PO_DIRECTORY/$PO_NAME.1po", "$PO_DIRECTORY/$PO_NAME.2po") == 0) {
         unlink "$PO_DIRECTORY/$PO_NAME.po";
@@ -113,8 +108,7 @@ for(@LOCALE_LIST) {
 # clean
 unlink $filelist;
 
-print STDERR "\ngettext.pl: Done.\n";
-print STDERR "gettext.pl: Don't forget to set environment variable(LC_ALL) to your locale.\n";
+print STDERR "\ngettext.pl: Done. Set environment variable(LC_ALL) to your locale.\n";
 
 exit;
 

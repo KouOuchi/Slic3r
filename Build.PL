@@ -132,17 +132,16 @@ EOF
             }
         }
     }
-
+    
     if (!$gui) {
         # temporarily require this dev version until this upstream bug
         # is resolved: https://rt.cpan.org/Ticket/Display.html?id=86367
-        system $cpanm, 'SMUELLER/ExtUtils-ParseXS-3.24.tar.gz';
-        
+        system $cpanm, 'SMUELLER/ExtUtils-ParseXS-3.18_04.tar.gz';        
         # clean xs directory before reinstalling, to make sure Build is called
         # with current perl binary
         if (-e './xs/Build') {
             if ($^O eq 'MSWin32') {
-                system 'cmd.exe', '/K', 'xs\Build.bat', 'distclean';
+                system 'cmd.exe', '/C', 'xs\Build.bat', 'distclean';
             } else {
                 system './xs/Build', 'distclean';
             }
@@ -154,14 +153,16 @@ EOF
     }
 
     if ($i18n) {
+        print "i18n processing...";
+	
 	# retrive sources and update gettext's resources
-        if (-e './utils/i18n/gettext.pl') {
-	    if ($^O eq 'MSWin32') {
-                system 'perl', 'utils\i18n\gettext.pl';
-            } else {
-                system 'perl', './utils/i18n/gettext.pl';
-            }
+        if ($^O eq 'MSWin32') {
+            system "$^X", 'utils\i18n\gettext.pl';
+        } else {
+            system "$^X", 'utils/i18n/gettext.pl';
         }
+
+        print "done.\n";
     }
 }
 
