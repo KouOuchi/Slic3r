@@ -104,7 +104,7 @@ use base 'Slic3r::GUI::SimpleTab';
 use Wx qw(:sizer);
 
 sub name { 'print' }
-sub title { Slicr3::_u('Print Settings') }
+sub title { Slic3r::_u('Print Settings') }
 
 sub build {
     my $self = shift;
@@ -195,7 +195,7 @@ sub build {
     my $self = shift;
 
     $self->append_optgroup(
-        title => 'Size and coordinates',
+        title => Slic3r::_u('Size and coordinates'),
         options => [qw(bed_size print_center z_offset)],
     );
 

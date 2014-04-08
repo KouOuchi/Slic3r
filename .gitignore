@@ -6,6 +6,8 @@ _build
 blib
 xs/buildtmp
 *.o
+*.mo
 MANIFEST.bak
 xs/MANIFEST.bak
 /var/po/slic3r.pot
+*.*~

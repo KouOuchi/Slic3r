@@ -24,6 +24,8 @@ my %prereqs = qw(
     Test::More                      0
     IO::Scalar                      0
     Time::HiRes                     0
+    Locale::TextDomain              0
+    File::Touch                     0
 );
 my %recommends = qw(
     Class::XSAccessor               0
@@ -35,8 +37,12 @@ my %recommends = qw(
 my $gui;
 my $i18n;
 for(my $i=0; $i<2; $i++) {
-	$gui = defined $ARGV[$i] && $ARGV[$i] eq '--gui';
-	$i18n = defined $ARGV[$i] && $ARGV[$i] eq '--i18n';
+    if (defined $ARGV[$i] && $ARGV[$i] eq '--gui') {
+	$gui = 1;
+    }
+    if (defined $ARGV[$i] && $ARGV[$i] eq '--i18n') {
+	$i18n = 1;
+    }
 }
 
 if ($gui) {
@@ -50,12 +56,11 @@ if ($gui) {
 }
 
 if ($i18n) {
-    %recommends = qw(
-	File::Touch                     0
-    );
-
-	# retrive sources and update gettext's resources
-	system("utils/i18n/gettext.pl") == 0 or die $@;
+    if ($^O eq 'MSWin32') {
+	system "$^X", 'utils\i18n\gettext.pl';
+    } else {
+	system "$^X", 'utils/i18n/gettext.pl';
+    }
 }
 
 my @missing_prereqs = ();
@@ -140,15 +145,12 @@ EOF
     if (!$gui) {
         # temporarily require this dev version until this upstream bug
         # is resolved: https://rt.cpan.org/Ticket/Display.html?id=86367
-        system $cpanm, 'SMUELLER/ExtUtils-ParseXS-3.18_04.tar.gz';
-        
+        system $cpanm, 'ExtUtils::ParseXS';
         # clean xs directory before reinstalling, to make sure Build is called
         # with current perl binary
         if (-e './xs/Build') {
             if ($^O eq 'MSWin32') {
-                system 'cd', 'xs';
-                system 'Build', 'distclean';
-                system 'cd', '..';
+                system 'cmd.exe', '/C', 'xs\Build.bat', 'distclean';
             } else {
                 system './xs/Build', 'distclean';
             }
@@ -157,6 +159,19 @@ EOF
         if ($res != 0) {
             die "The XS/C++ code failed to compile, aborting\n";
         }
+    }
+
+    if ($i18n) {
+        print "i18n processing...";
+	
+	# retrive sources and update gettext's resources
+        if ($^O eq 'MSWin32') {
+            system "$^X", 'utils\i18n\gettext.pl';
+        } else {
+            system "$^X", 'utils/i18n/gettext.pl';
+}
+
+        print "done.\n";
     }
 }
 
