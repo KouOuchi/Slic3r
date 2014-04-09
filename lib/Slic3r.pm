@@ -168,11 +168,6 @@ sub open {
     return CORE::open $$fh, $mode, encode_path($filename);
 }
 
-sub _u {
-    my ($message) = @_;
-    return decode_utf8(__($message));
-}
-
 # this package declaration prevents an ugly fatal warning to be emitted when
 # spawning a new thread
 package GLUquadricObjPtr;
