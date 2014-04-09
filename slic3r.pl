@@ -10,7 +10,7 @@ BEGIN {
 
 use Getopt::Long qw(:config no_auto_abbrev);
 use List::Util qw(first);
-use POSIX qw(setlocale LC_NUMERIC);
+use POSIX qw(setlocale locale_h LC_NUMERIC LC_ALL LC_CTYPE);
 use Slic3r;
 $|++;
 
@@ -36,6 +36,7 @@ my %cli_options = ();
         'merge|m'               => \$opt{merge},
         'repair'                => \$opt{repair},
         'info'                  => \$opt{info},
+	'locale=s'              => \$opt{locale}
     );
     foreach my $opt_key (keys %{$Slic3r::Config::Options}) {
         my $cli = $Slic3r::Config::Options->{$opt_key}->{cli} or next;
@@ -48,6 +49,9 @@ my %cli_options = ();
 
 # process command line options
 my $cli_config = Slic3r::Config->new_from_cli(%cli_options);
+
+# override environment variable 
+$ENV{'LC_MESSAGES'} = $opt{locale} if defined $opt{locale};
 
 # load configuration files
 my @external_configs = ();
@@ -431,6 +435,8 @@ $j
                         Temperature difference to be applied when an extruder is not active and
                         --ooze-prevention is enabled (default: $config->{standby_temperature_delta})
     
+  i18n options:
+    --locale=<locale>   override environment variable (LC_MESSAGES).
 EOF
     exit ($exit_code || 0);
 }
