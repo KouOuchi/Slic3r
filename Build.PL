@@ -55,14 +55,6 @@ if ($gui) {
     );
 }
 
-if ($i18n) {
-    if ($^O eq 'MSWin32') {
-	system "$^X", 'utils\i18n\gettext.pl';
-    } else {
-	system "$^X", 'utils/i18n/gettext.pl';
-    }
-}
-
 my @missing_prereqs = ();
 if ($ENV{SLIC3R_NO_AUTO}) {
     foreach my $module (sort keys %prereqs) {
@@ -169,8 +161,7 @@ EOF
             system "$^X", 'utils\i18n\gettext.pl';
         } else {
             system "$^X", 'utils/i18n/gettext.pl';
-}
-
+	}
         print "done.\n";
     }
 }
