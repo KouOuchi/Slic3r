@@ -109,7 +109,7 @@ msgstr ""
 
 #: lib/Slic3r/Config.pm:90
 msgid "Use firmware retraction"
-msgstr ""
+msgstr "ファームウェアのリトラクト利用"
 
 #: lib/Slic3r/Config.pm:91
 msgid ""
@@ -185,7 +185,7 @@ msgstr ""
 
 #: lib/Slic3r/Config.pm:145
 msgid "Nozzle diameter"
-msgstr ""
+msgstr "ノズル径"
 
 #: lib/Slic3r/Config.pm:146
 msgid ""
@@ -217,7 +217,7 @@ msgstr ""
 
 #: lib/Slic3r/Config.pm:174 lib/Slic3r/Config.pm:258
 msgid "Other layers"
-msgstr ""
+msgstr "その他のレイヤ"
 
 #: lib/Slic3r/Config.pm:175 lib/Slic3r/GUI/Tab.pm:576
 msgid "Temperature"
@@ -1516,7 +1516,7 @@ msgstr ""
 
 #: lib/Slic3r/GUI/Tab.pm:580
 msgid "Extruder"
-msgstr ""
+msgstr "エクストルーダ"
 
 #: lib/Slic3r/GUI/Tab.pm:584
 msgid "Bed"

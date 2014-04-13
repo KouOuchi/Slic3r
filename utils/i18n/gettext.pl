@@ -108,7 +108,7 @@ for(@LOCALE_LIST) {
 # clean
 unlink $filelist;
 
-print STDERR "\ngettext.pl: Done. Set environment variable(LC_ALL) to your locale.\n";
+print STDERR "\ngettext.pl: Done. Set environment variable(LC_MESSAGES) to your locale.\n";
 
 exit;
 
