@@ -44,7 +44,7 @@ $ LC_MESSAGES=ja_JP.UTF-8 perl slic3r.pl --gui --gui-mode expert --no-plater
 
 ### How to install and run on Windows?
 
-Compiled binary is ![here](https://drive.google.com/file/d/0B6h4aTPne6s4SXo2WWtCblBPQ0k/edit?usp=sharing)
+Compiled binary is [[here]](https://drive.google.com/file/d/0B6h4aTPne6s4SXo2WWtCblBPQ0k/edit?usp=sharing)
 
 #### Prerequisite on Windows
 
